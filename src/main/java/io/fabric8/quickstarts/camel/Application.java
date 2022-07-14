@@ -19,6 +19,11 @@ import org.apache.camel.builder.RouteBuilder;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ImportResource;
+import org.apache.camel.component.servlet.CamelHttpTransportServlet;
+import org.apache.camel.model.rest.RestBindingMode;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.stereotype.Component;
 
 /**
  * A spring-boot application that includes a Camel route builder to setup the Camel routes
@@ -32,10 +37,41 @@ public class Application extends RouteBuilder {
         SpringApplication.run(Application.class, args);
     }
 
-    @Override
-    public void configure() throws Exception {
-        from("timer://foo?period=5000")
-            .setBody().constant("Hello World")
-            .log(">>> ${body}");
+    // @Override
+    // public void configure() throws Exception {
+    //     from("timer://foo?period=5000")
+    //         .setBody().constant("Hello World")
+    //         .log(">>> ${body}");
+    // }
+    @Component
+    class RestApi extends RouteBuilder {
+
+        @Override
+        public void configure() {
+            restConfiguration()
+                .contextPath("/hello")
+                    .apiProperty("api.title", "Camel REST API")
+                    .apiProperty("api.version", "1.0")
+                    .apiProperty("cors", "true")
+                    .apiProperty("api.specification.contentType.json", "application/vnd.oai.openapi+json;version=3.0")
+                    .apiProperty("api.specification.contentType.yaml", "application/vnd.oai.openapi;version=3.0")
+                    .apiContextRouteId("doc-api")
+                .component("servlet")
+                .bindingMode(RestBindingMode.json);
+
+            rest("/get").description("REST service")
+                .get("/").description("Hello World")
+                    .route().routeId("hello-world")
+                    // .to("sql:select distinct description from orders?" +
+                    //     "dataSource=dataSource&" +
+                    //     "outputClass=io.fabric8.quickstarts.camel.Book")
+                    .setBody().constant("Hello World")   
+                    .log(">>> ${body}"); 
+                    .endRest()
+                // .get("order/{id}").description("Details of an order by id")
+                //     .route().routeId("order-api")
+                //     .to("sql:select * from orders where id = :#${header.id}?" +
+                //         "dataSource=dataSource&outputType=SelectOne&" +
+                //         "outputClass=io.fabric8.quickstarts.camel.Order");
     }
 }
