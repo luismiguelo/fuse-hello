@@ -21,9 +21,9 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.fabric8.quickstarts</groupId>
-    <artifactId>spring-boot-camel</artifactId>
-    <version>7.9.0.fuse-sb2-790048</version>
+    <groupId>io.fabric8.quickstarts.demo</groupId>
+    <artifactId>spring-boot-camel-demo</artifactId>
+    <version>1.0.0</version>
 
     <name>Fabric8 :: Quickstarts :: Spring-Boot :: Camel</name>
     <description>Spring Boot example running a Camel route</description>
@@ -33,7 +33,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- configure the Fuse version you want to use here -->
-        <fuse.bom.version>7.9.0.fuse-sb2-790065</fuse.bom.version>
+        <fuse.bom.version>7.9.0.fuse-sb2-790065-redhat-00001</fuse.bom.version>
         <docker.image.version>1.9</docker.image.version>
 
         <!-- maven plugin versions -->
@@ -84,6 +84,11 @@
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-servlet-starter</artifactId>
         </dependency>
+        
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-jetty-starter</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.camel</groupId>
@@ -98,33 +103,6 @@
             <artifactId>camel-sql-starter</artifactId>
         </dependency>
 
-
-        <!-- Test -->
-
-        <dependency>
-            <groupId>io.fabric8</groupId>
-            <artifactId>kubernetes-model</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>io.fabric8</groupId>
-            <artifactId>kubernetes-client</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>io.fabric8</groupId>
-            <artifactId>openshift-client</artifactId>
-            <version>4.6.2</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
     <build>
