@@ -41,7 +41,7 @@ public class Application extends SpringBootServletInitializer {
         @Override
         public void configure() {
             restConfiguration()
-                .contextPath("/hello")
+                .contextPath("")
                     .apiProperty("api.title", "Camel REST API")
                     .apiProperty("api.version", "1.0")
                     .apiProperty("cors", "true")
@@ -50,15 +50,15 @@ public class Application extends SpringBootServletInitializer {
                     .apiContextRouteId("doc-api")
                 .component("jetty")
                 .port(8080)
-                .bindingMode(RestBindingMode.auto);
+                .bindingMode(RestBindingMode.off);
 
-            rest("/get").description("REST service")
+            rest("/hello/get").description("REST service")
                 .get().description("Hello World")
                     .route().routeId("hello-world")
-                    .setBody().constant("Hello World")   
+                    .setBody().constant("{ \"mensaje\" : \"Hello World\" }")   
                     .log(">>> ${body}") 
-                    .endRest();
-
+                    .setHeader("Content-Type").constant("application/json");
+            
         }
         
     }
