@@ -15,13 +15,22 @@
  */
 package io.fabric8.quickstarts.camel;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ImportResource;
 import org.apache.camel.model.rest.RestBindingMode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.stereotype.Component;
+
 
 /**
  * A spring-boot application that includes a Camel route builder to setup the Camel routes
@@ -30,6 +39,8 @@ import org.springframework.stereotype.Component;
 @ImportResource({"classpath:spring/camel-context.xml"})
 public class Application extends SpringBootServletInitializer {
 
+	Logger logger = LoggerFactory.getLogger(Application.class);
+	
     // must have a main method spring-boot can run
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -55,6 +66,7 @@ public class Application extends SpringBootServletInitializer {
             rest("/hello/get").description("REST service")
                 .get().description("Hello World")
                     .route().routeId("hello-world")
+                    .process(new ProcessorFuse())
                     .setBody().constant("{ \"mensaje\" : \"Hello World\" }")   
                     .log(">>> ${body}") 
                     .setHeader("Content-Type").constant("application/json");
@@ -62,5 +74,27 @@ public class Application extends SpringBootServletInitializer {
         }
         
     }
+    
+    private class ProcessorFuse implements Processor {
+
+		@Override
+		public void process(Exchange ex) throws Exception {
+			
+			logger.info("Ingresando al Procesor");	
+			int numero=0;
+			int numero2=0;
+			List<Integer> lista = new ArrayList<Integer>();
+			for(int i=1;i<=1000;i++){ 
+			   numero = (int) (Math.random()* 10000000) + 6000000;      
+			   lista.add(numero);
+			}
+			Iterator<Integer> iter = lista.iterator();
+			while (iter.hasNext()) {
+				numero2=iter.next();
+			}
+			Thread.sleep(500);
+			logger.info("Numero Obtenido: "+numero2);	
+		}
+	}
     
 }
