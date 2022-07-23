@@ -92,7 +92,7 @@ public class Application extends SpringBootServletInitializer {
 			while (iter.hasNext()) {
 				numero2=iter.next();
 			}
-			Thread.sleep(500);
+//			Thread.sleep(500);
 			logger.info("Numero Obtenido: "+numero2);	
 		}
 	}
